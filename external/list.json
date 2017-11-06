@@ -1,0 +1,9 @@
+{
+  "bighugelabs": {
+    "website": "https://words.bighugelabs.com/getkey.php",
+    "endpoint": {
+      "host": "words.bighugelabs.com",
+      "path": "/api/2/"
+    }
+  }
+}

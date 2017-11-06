@@ -1,0 +1,24 @@
+{
+  "name": "domain_name_generator",
+  "version": "1.0.0",
+  "description": "Takes a set of keywords, searches for their synonyms, then bidirectionally checks if a two word combination of different results is available as a domain name.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "domain",
+    "name",
+    "generator",
+    "website",
+    "url",
+    "availability",
+    "automatic"
+  ],
+  "author": "Ferenc Fazekas",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "dns": "^0.2.2"
+  }
+}
