@@ -19,6 +19,28 @@ with the following contents
 }
 ```
 
+To create the configurations we will be passing to the script, create
+```
+config\input.json
+```
+
+These are the sample contents for your input.json file
+```
+{
+  "words": [
+    "data",
+    "cloud",
+    "hive"
+  ],
+  "extensions": [
+    "com",
+    "com.au",
+    "io"
+  ],
+  "report": "report.json"
+}
+```
+
 # Usage
 You can run the script using
 ```

@@ -4,7 +4,7 @@ const https = require('https');
 const Promise = require("bluebird");
 function requestSynonyms(word) {
     let synonyms = [];
-    // options for the GET request
+    // config for the GET request
     let options = {
         host: bighugelabs.endpoint.host, // only the domain name (no http/https)
         path: bighugelabs.endpoint.path + bighugelabsKey + "/" + word + "/json",
@@ -13,7 +13,7 @@ function requestSynonyms(word) {
     return new Promise((resolve, reject) => {
         let request = https.request(options, function (response) {
             if (response.statusCode !== 200) {
-                reject("Unexpected statusCode: ", response.statusCode, " for options: ", JSON.stringify(options))
+                reject("Unexpected statusCode: ", response.statusCode, " for config: ", JSON.stringify(options))
             }
             response.on('data', function (data) {
                 let rawSynonyms = JSON.parse(data).noun.syn;
