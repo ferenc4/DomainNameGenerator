@@ -7,9 +7,24 @@ let checkAllDomains = function (domains, outputFile) {
     domains.forEach(function (domain) {
         promisedResponses.push(new Promise((resolve, reject) => {
             dns.resolve4(domain, function (err, addresses) {
+                let exists;
+                if (err) {
+                    if (err.hasOwnProperty('errno')) {
+                        if (err.errno === 'ENOTFOUND') {
+                            exists = false;
+                        } else if (err.errno === 'ESERVFAIL') {
+                            exists = true;
+                        } else {
+                            console.log(err);
+                            exists = false;
+                        }
+                    }
+                } else {
+                    exists = true;
+                }
                 resolve({
                     "domain": domain,
-                    "exists": Boolean(err)
+                    "exists": exists
                 });
             })
         }));
