@@ -47,7 +47,7 @@ let checkAllDomains = function (domains, outputFile) {
 };
 
 saveReport = function (filename, data) {
-    fs.writeFile(filename, JSON.stringify(data), 'utf8', (err) => {
+    fs.writeFile(filename, JSON.stringify(data, null, 2), 'utf8', (err) => {
         if (err) throw err;
         else console.log("Saved list to " + filename)
     })
