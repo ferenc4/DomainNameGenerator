@@ -2,7 +2,7 @@ const bighugelabs = require('../external/list').bighugelabs;
 const bighugelabsKey = require('../external/keys').bighugelabs;
 const https = require('https');
 const Promise = require("bluebird");
-async function requestSynonyms(word) {
+function requestSynonyms(word) {
     let synonyms = [];
     // options for the GET request
     let options = {
@@ -10,32 +10,31 @@ async function requestSynonyms(word) {
         path: bighugelabs.endpoint.path + bighugelabsKey + "/" + word + "/json",
         method: 'GET'
     };
-    return new Promise(
-        (resolve, reject) => {
-            let request = https.request(options, function (response) {
-                if (response.statusCode !== 200) {
-                    reject("Unexpected statusCode: ", response.statusCode, " for options: ", JSON.stringify(options))
-                }
-                response.on('data', function (data) {
-                    let rawSynonyms = JSON.parse(data).noun.syn;
-                    rawSynonyms.forEach(function (rawSynonym, index) {
-                        // we want to remove all phrases
-                        if (String(rawSynonym).indexOf(" ") === -1) {
-                            synonyms.push(rawSynonym)
-                        }
-                        if (index === rawSynonyms.length - 1) {
-                            resolve(synonyms)
-                        }
-                    })
-                });
+    return new Promise((resolve, reject) => {
+        let request = https.request(options, function (response) {
+            if (response.statusCode !== 200) {
+                reject("Unexpected statusCode: ", response.statusCode, " for options: ", JSON.stringify(options))
+            }
+            response.on('data', function (data) {
+                let rawSynonyms = JSON.parse(data).noun.syn;
+                rawSynonyms.forEach(function (rawSynonym, index) {
+                    // we want to remove all phrases
+                    if (String(rawSynonym).indexOf(" ") === -1) {
+                        synonyms.push(rawSynonym)
+                    }
+                    if (index === rawSynonyms.length - 1) {
+                        resolve({"synonyms": synonyms, "word": word})
+                    }
+                })
             });
-            request.end();
-        }
-    );
+        });
+        request.end();
+    });
 }
 
-module.exports = findSynonyms = async function (words) {
-    const synonymTree = {};
+module.exports = findSynonyms = function (words) {
+    let synonymTree = {};
+    let promisedSynonyms = [];
     return new Promise((resolve, reject) => {
         words.forEach(function (word, index) {
             /*
@@ -48,16 +47,15 @@ module.exports = findSynonyms = async function (words) {
              * so we can later use it as well for domain name generation
              *
              */
-            requestSynonyms(word)
-                .then((synonyms) => {
-                    synonymTree[word] = synonyms;
-                    synonymTree[word].push(word);
-                    console.log(synonymTree[word])
+            promisedSynonyms.push(requestSynonyms(word))
+        });
+        Promise.all(promisedSynonyms)
+            .then((promisedSynonyms) => {
+                promisedSynonyms.forEach(function (synonymObject) {
+                    synonymTree[synonymObject.word] = synonymObject.synonyms;
+                    synonymTree[synonymObject.word].push(synonymObject.word);
                 });
-
-            if (index === words.length - 1) {
-                resolve(synonymTree)
-            }
-        })
+                resolve(synonymTree);
+            });
     });
 };

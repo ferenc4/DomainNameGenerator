@@ -1,11 +1,14 @@
 const Promise = require("bluebird");
-const findSynonyms = require("./synonym/search.js");
-const words = ['data', 'cloud', 'hive'];
-const synonymTreeP = findSynonyms(words);
-synonymTreeP.then(function (wordTree) {
-    const generateCombinations = require("./combination/generator.js");
-    generateCombinations(wordTree)
-});
+const findSynonyms = require("./synonym/search");
+const generateCombinations = require("./combination/generator");
 const reportOnDomains = require("./domain/check");
+//inputs start
+const words = ['data', 'cloud', 'hive'];
+const domainExtensions = ['com', 'com.au', 'io'];
 const report = "report.json";
-// reportOnDomains(report, domains);
+const promisedSynonymTree = findSynonyms(words);
+promisedSynonymTree.then(function (wordTree) {
+    return generateCombinations(wordTree, domainExtensions)
+}).then(function (domains) {
+    return reportOnDomains(report, domains)
+});
