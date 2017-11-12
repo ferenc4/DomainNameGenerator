@@ -27,14 +27,25 @@ config\input.json
 These are the sample contents for your input.json file
 ```
 {
+  "filters": {
+    "maxVowels": 4,
+    "countConsecutiveVowelsAsSeparate": true,
+    "extensions": [
+      "com",
+      "com.au",
+      "io"
+    ],
+    "ignore": [
+      "throng",
+      "gloom",
+      "maid",
+      "maiden",
+      "glumness"
+    ]
+  },
   "words": [
     "data",
     "cloud",
-    "hive"
-  ],
-  "extensions": [
-    "com",
-    "com.au",
     "io"
   ],
   "report": "report.json"
