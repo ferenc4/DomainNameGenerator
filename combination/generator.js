@@ -9,26 +9,42 @@ function CombinationGenerator(filters) {
         let hyphenOrNothing = filters.hasOwnProperty("separateByHyphen") && filters.separateByHyphen ? "-" : "";
         let combination1 = word1 + hyphenOrNothing + word2;
         let combination2 = word2 + hyphenOrNothing + word1;
-        return [combination1, combination2];
+        let result = [combination1, combination2];
+        if (filters.hasOwnProperty("includeSingleWords") && filters.includeSingleWords === true) {
+            result.push(word1);
+            result.push(word2);
+        }
+        return result;
     };
 
     let getVowelCount = function (strValue) {
         let vowel_list = 'aeiouAEIOU';
         let vcount = 0;
-        let lastCharWasVowel = false;
+        let previousCharWasVowel = false;
         for (let x = 0; x < strValue.length; x++) {
+            // current char is a vowel
             if (vowel_list.indexOf(strValue[x]) !== -1) {
                 if (filters.hasOwnProperty("countConsecutiveVowelsAsSeparate") &&
                     filters.countConsecutiveVowelsAsSeparate === false) {
-                    if (!lastCharWasVowel) {
+                    if (!previousCharWasVowel) {
+                        if (x === strValue.length - 1 && filters.hasOwnProperty("countLastCharIfVowel")) {
+                            if (filters.countLastCharIfVowel === true) {
+                                vcount += 1;
+                            }
+                        } else {
+                            vcount += 1;
+                        }
+                    }
+                } else if (x === strValue.length - 1 && filters.hasOwnProperty("countLastCharIfVowel")) {
+                    if (filters.countLastCharIfVowel === true) {
                         vcount += 1;
                     }
-                    lastCharWasVowel = true;
                 } else {
                     vcount += 1;
                 }
+                previousCharWasVowel = true;
             } else {
-                lastCharWasVowel = false;
+                previousCharWasVowel = false;
             }
         }
         return vcount;
