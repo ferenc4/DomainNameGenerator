@@ -12,7 +12,8 @@ let checkAllDomains = function (domains, outputFile) {
                     if (err.hasOwnProperty('errno')) {
                         if (err.errno === 'ENOTFOUND') {
                             exists = false;
-                        } else if (err.errno === 'ESERVFAIL') {
+                        } else if (err.errno === 'ESERVFAIL' ||
+                            err.errno === 'ENODATA') {
                             exists = true;
                         } else {
                             console.log(err);
