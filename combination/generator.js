@@ -6,8 +6,9 @@ const Promise = require("bluebird");
  */
 function CombinationGenerator(filters) {
     let generateCombinationsOfTwoWords = function (word1, word2) {
-        let combination1 = word1 + word2;
-        let combination2 = word2 + word1;
+        let hyphenOrNothing = filters.separateByHyphen ? "-" : "";
+        let combination1 = word1 + hyphenOrNothing + word2;
+        let combination2 = word2 + hyphenOrNothing + word1;
         return [combination1, combination2];
     };
 

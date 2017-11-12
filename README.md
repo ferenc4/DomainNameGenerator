@@ -30,6 +30,7 @@ These are the sample contents for your input.json file
   "filters": {
     "maxVowels": 4,
     "countConsecutiveVowelsAsSeparate": true,
+    "separateByHyphen":false,
     "extensions": [
       "com",
       "com.au",
