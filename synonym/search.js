@@ -16,7 +16,11 @@ function requestSynonyms(word) {
                 reject("Unexpected statusCode: ", response.statusCode, " for config: ", JSON.stringify(options))
             }
             response.on('data', function (data) {
-                let rawSynonyms = JSON.parse(data).noun.syn;
+                let noun = JSON.parse(data).noun;
+                let rawSynonyms = [];
+                if (noun !== undefined) {
+                    rawSynonyms = noun.syn;
+                }
                 rawSynonyms.forEach(function (rawSynonym, index) {
                     // we want to remove all phrases
                     if (String(rawSynonym).indexOf(" ") === -1) {
